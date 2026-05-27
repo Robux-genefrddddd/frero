@@ -15,36 +15,112 @@ interface Question {
   definition: string;
   doNotMeasure: string[];
   options: string[];
+  placeholder?: string;
 }
 
-const questions: Question[] = [
+const baseQuestions: Question[] = [
   {
-    id: "violence-1",
-    section: "Violence",
-    title: "Does this experience contain violence and/or violent content?",
+    id: "gift-choice-1",
+    section: "Ton Cadeau",
+    title: "Quel cadeau souhaites-tu recevoir ?",
     definition:
-      "Violence: Depictions of the act and/or the consequence of intentional, threatened and/or actual use of physical and/or psychological force against characters and/or players.",
+      "Choisis le type de cadeau qui t'intéresse. Tu ne peux sélectionner qu'une seule option.",
     doNotMeasure: [
-      "Character death due to accidents.",
-      "Nonviolent adversarial games.",
-      "Depictions of natural disasters.",
-      "Roblox default character reset/death mechanics.",
+      "Un compte par personne uniquement",
+      "Soyez honnête dans vos réponses",
+      "Les comptes multiples seront disqualifiés",
     ],
-    options: ["No", "Yes (Contains Violence)"],
+    options: ["Robux", "Nitro Discord", "Carte cadeau"],
+  },
+  {
+    id: "contact-1",
+    section: "Informations de Contact",
+    title: "Complète tes informations de contact",
+    definition:
+      "Entre ton pseudo Discord et ton ID Discord. Ces informations nous permettront de te contacter et de t'envoyer ton cadeau.",
+    doNotMeasure: [
+      "Tous les champs sont obligatoires",
+      "Vérifie bien tes informations avant de continuer",
+      "Ne partage jamais ton mot de passe avec personne",
+    ],
+    options: ["contact-multiinput"],
+    placeholder: "Informations de contact",
   },
 ];
+
+const getQuantityQuestion = (giftChoice: string): Question => {
+  const baseQuestion = {
+    id: "quantity-1",
+    section: "Quantité & Plateforme",
+    doNotMeasure: [
+      "Une seule quantité par personne",
+      "Les demandes excessives seront refusées",
+      "L'annonce des gagnants se fera sur Discord ou via le site",
+    ],
+  };
+
+  if (giftChoice === "Robux") {
+    return {
+      ...baseQuestion,
+      title: "Combien de Robux veux-tu ?",
+      definition:
+        "Choisis le montant souhaité : 100, 500, 1000 ou 5000 Robux.",
+      options: ["100 Robux", "500 Robux", "1000 Robux", "5000 Robux"],
+    };
+  } else if (giftChoice === "Nitro Discord") {
+    return {
+      ...baseQuestion,
+      title: "Quel type de Nitro Discord veux-tu ?",
+      definition:
+        "Nitro Classic : émojis custom et GIFs animés. Nitro Full : jeux inclus. Choisis une option.",
+      options: ["Nitro Classic (1 mois)", "Nitro Full (1 mois)"],
+    };
+  } else if (giftChoice === "Carte cadeau") {
+    return {
+      ...baseQuestion,
+      title: "Quel montant de carte cadeau veux-tu ?",
+      definition:
+        "Choisis ton montant : 10€, 25€, 50€ ou 100€.",
+      options: ["10€", "25€", "50€", "100€"],
+    };
+  }
+
+  return {
+    ...baseQuestion,
+    title: "Sélectionne d'abord un cadeau",
+    definition: "Complète la section 'Ton Cadeau' pour continuer.",
+    options: [],
+  };
+};
+
+const getQuestions = (answers: Record<string, string>): Question[] => {
+  const giftChoice = answers["gift-choice-1"];
+  const quantityQuestion = getQuantityQuestion(giftChoice);
+
+  return [
+    baseQuestions[0],
+    quantityQuestion,
+    baseQuestions[1],
+  ];
+};
 
 export default function Index() {
   const [completedSections, setCompletedSections] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [sections, setSections] = useState<Section[]>([
-    { id: "violence", title: "Violence", expanded: true },
-    { id: "blood", title: "Blood", expanded: false },
-    { id: "fear", title: "Fear", expanded: false },
+    { id: "gift", title: "Ton Cadeau", expanded: true },
+    { id: "quantity", title: "Quantité & Plateforme", expanded: false },
+    { id: "contact", title: "Informations de Contact", expanded: false },
   ]);
 
+  const questions = getQuestions(answers);
+
   const handleAnswer = (questionId: string, value: string) => {
+    const oldValue = answers[questionId];
     setAnswers({ ...answers, [questionId]: value });
+    if (value && !oldValue) {
+      setCompletedSections((prev) => prev + 1);
+    }
   };
 
   const toggleSection = (sectionId: string) => {
@@ -63,40 +139,33 @@ export default function Index() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            Maturity & Compliance Questionnaire
+            Giveaway & Dream Form
           </h1>
           <p className="text-sm text-muted-foreground">
-            {completedSections} of 17 sections completed
+            {completedSections} of 3 sections completed
           </p>
         </div>
 
         {/* Instructions */}
         <div className="mb-8 space-y-4">
-          <p className="text-sm">Please answer the questions accurately based on:</p>
+          <p className="text-sm">Tu peux t'inscrire une seule fois. Remplis le formulaire avec soin :</p>
           <ul className="text-sm space-y-2 ml-4">
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                The most mature/extreme content a player can possibly experience
-                in your experience (e.g. If your experience depicts mild violence
-                occasionally and moderate violence repeatedly, declare "Repeated
-                Moderate Violence").
+                Une inscription par personne. Aucune modification possible après envoi.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Content in any forms, including and not limited to any assets
-                (textures, models, animations, audio, video, etc.) and/or
-                narratives;
+                Réponds honnêtement. Les fausses réponses entraîneront une disqualification.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Creator generated content only; user generated content is not
-                measured. (E.g. you don't need to account for blood in a
-                player's platform avatar brought into your experience.)
+                Tous les champs obligatoires. Les formulaires incomplets seront rejetés.
               </span>
             </li>
           </ul>
@@ -133,10 +202,10 @@ export default function Index() {
 
                         <div className="space-y-2">
                           <p className="text-sm">
-                            <span className="font-semibold">Violence:</span>{" "}
+                            <span className="font-semibold">{question.section}:</span>{" "}
                             {question.definition}
                           </p>
-                          <p className="text-sm font-semibold">Do NOT measure:</p>
+                          <p className="text-sm font-semibold">À respecter :</p>
                           <ul className="text-sm space-y-1 ml-4">
                             {question.doNotMeasure.map((item, idx) => (
                               <li key={idx} className="flex gap-2">
@@ -147,22 +216,90 @@ export default function Index() {
                           </ul>
                         </div>
 
-                        <fieldset className="space-y-3">
-                          {question.options.map((option) => (
-                            <label
-                              key={option}
-                              className="flex items-center gap-3 cursor-pointer"
-                            >
+                        {question.options[0] === "contact-multiinput" ? (
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-sm font-semibold mb-2">Pseudonyme Discord *</label>
                               <input
-                                type="radio"
-                                name={question.id}
-                                value={option}
-                                className="w-4 h-4 cursor-pointer"
+                                type="text"
+                                placeholder="Ton pseudo Discord"
+                                value={(answers["contact-discord"] || "")}
+                                onChange={(e) =>
+                                  setAnswers({
+                                    ...answers,
+                                    "contact-discord": e.target.value,
+                                  })
+                                }
+                                className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                               />
-                              <span className="text-sm">{option}</span>
-                            </label>
-                          ))}
-                        </fieldset>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-semibold mb-2">ID Discord *</label>
+                              <input
+                                type="text"
+                                placeholder="Ton ID Discord (ex: 123456789012345678)"
+                                value={(answers["contact-discord-id"] || "")}
+                                onChange={(e) =>
+                                  setAnswers({
+                                    ...answers,
+                                    "contact-discord-id": e.target.value,
+                                  })
+                                }
+                                className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                              />
+                            </div>
+                            {answers["contact-discord"] && answers["contact-discord-id"] && (
+                              <div className="flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
+                                <Check className="w-5 h-5" />
+                                Informations enregistrées
+                              </div>
+                            )}
+                          </div>
+                        ) : question.options[0] === "textinput" ? (
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              placeholder={question.placeholder || "Saisis ta réponse..."}
+                              value={answers[question.id] || ""}
+                              onChange={(e) =>
+                                handleAnswer(question.id, e.target.value)
+                              }
+                              className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                            />
+                            {answers[question.id] && (
+                              <div className="flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
+                                <Check className="w-5 h-5" />
+                                Pseudo enregistré
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <fieldset className="space-y-3">
+                            {question.options.map((option) => (
+                              <div key={option}>
+                                <label className="flex items-center gap-3 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name={question.id}
+                                    value={option}
+                                    checked={answers[question.id] === option}
+                                    onChange={(e) =>
+                                      handleAnswer(question.id, e.target.value)
+                                    }
+                                    className="w-4 h-4 cursor-pointer"
+                                  />
+                                  <span className="text-sm">{option}</span>
+                                </label>
+                                {answers[question.id] === option && (
+                                  <div className="mt-2 flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
+                                    <Check className="w-4 h-4" />
+                                    Choix confirmé
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </fieldset>
+                        )}
                       </div>
                     ))}
                 </div>
@@ -175,68 +312,53 @@ export default function Index() {
         <div className="mt-12 space-y-6">
           <div className="space-y-4">
             <p className="text-sm font-semibold">
-              After you submit this form, you'll receive a content maturity
-              label (Minimal, Mild, Moderate, or Restricted) and a regional
-              compliance result for your experience.
+              Après avoir soumis, tu verras l'annonce du giveaway sur Discord ou recevras une notification sur le site.
+              Les gagnants seront notifiés directement.
             </p>
-            <h3 className="font-semibold mt-4">Important Note</h3>
+            <h3 className="font-semibold mt-4">Points importants</h3>
             <ul className="text-sm space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  You may retake the Questionnaire anytime to accurately reflect
-                  the latest content in your experience.
+                  Une fois soumise, tu ne pourras pas modifier ta demande. Vérifie tout avant d'envoyer.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  You must come back and update your response if any of your
-                  answers changed (e.g. because of an experience update).
+                  Les gagnants sont choisis au hasard parmi les participants.
                 </span>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold">Impacts on Your Experience</h3>
+            <h3 className="font-semibold">Si tu gagnes</h3>
             <p className="text-sm">
-              Content maturity labels appear on the experience detail page and
-              are used to inform search and discovery. Experiences without a
-              content maturity label will show an "Unknown" label and won't be
-              recommended or playable to users. Please generate a content
-              maturity label for your experience as soon as it is eligible.
+              En participant, tu acceptes nos conditions. Si tu es sélectionné, tu recevras ton cadeau via Discord ou email.
             </p>
             <ul className="text-sm space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Content Maturity Label:</span>{" "}
-                  This label provides general information about content in your
-                  experience, so users can decide whether it's appropriate for
-                  them. This label will be displayed on your experience's
-                  details page and is used to inform parental controls.
+                  <span className="font-semibold">Annonce :</span> L'annonce sera faite sur Discord et/ou le site.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Regional Compliance:</span> If
-                  your experience contains certain themes, or doesn't follow
-                  Roblox policy APIs, it may not be allowed in some regions.
-                  This information isn't displayed publicly, but it may affect
-                  who can access your experience.
+                  <span className="font-semibold">Réception :</span> Tu recevras ton cadeau via Discord ou email selon le type.
                 </span>
               </li>
             </ul>
           </div>
 
           <p className="text-sm">
-            Learn more about our{" "}
+            Des questions ? Consulte{" "}
             <a href="#" className="text-primary hover:underline">
-              Policy APIs
+              la FAQ
             </a>
-            , which help you make your experience dynamically compliant.
+            {" "}ou contacte le support.
           </p>
         </div>
 
@@ -244,27 +366,36 @@ export default function Index() {
         <div className="mt-12 space-y-6 pb-8">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-base">Content Maturity Label</h3>
+              <h3 className="font-semibold text-base">Statut de ta Demande</h3>
               <Info className="w-4 h-4 text-muted-foreground" />
             </div>
-            <p className="text-sm font-semibold">Descriptors</p>
-            <div className="text-sm text-muted-foreground">Unknown</div>
-            <p className="text-sm text-muted-foreground">None</p>
+            <p className="text-sm font-semibold">Étape Actuelle</p>
+            {answers["gift-choice-1"] ? (
+              <div className="flex items-center gap-2 text-green-600 font-semibold">
+                <Check className="w-5 h-5" />
+                <span>Cadeau sélectionné : {answers["gift-choice-1"]}</span>
+              </div>
+            ) : (
+              <>
+                <div className="text-sm text-muted-foreground">En attente</div>
+                <p className="text-sm text-muted-foreground">Complète le formulaire pour continuer</p>
+              </>
+            )}
           </div>
 
           <div className="border-t border-border pt-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-base">Non-Compliant Regions</h3>
+              <h3 className="font-semibold text-base">Disponibilité</h3>
               <Info className="w-4 h-4 text-muted-foreground" />
             </div>
             <div className="flex gap-8">
               <div>
-                <p className="text-sm font-semibold mb-2">Descriptors</p>
-                <p className="text-sm text-muted-foreground">None</p>
+                <p className="text-sm font-semibold mb-2">Régions Acceptées</p>
+                <p className="text-sm text-muted-foreground">Monde entier</p>
               </div>
               <div>
-                <p className="text-sm font-semibold mb-2">Age Restriction</p>
-                <Info className="w-4 h-4 text-muted-foreground" />
+                <p className="text-sm font-semibold mb-2">Restrictions</p>
+                <p className="text-sm text-muted-foreground">Aucune</p>
               </div>
             </div>
           </div>
@@ -273,28 +404,28 @@ export default function Index() {
         {/* Start Button */}
         <div className="pb-8">
           <button className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-            Start
+            Envoyer ma demande
           </button>
         </div>
 
         {/* Footer */}
         <footer className="text-xs text-muted-foreground mt-12 pt-6 border-t border-border space-y-2">
-          <p>©2026 Roblox Corporation. All rights reserved.</p>
+          <p>©2026 Dream Giveaway. Tous droits réservés.</p>
           <div className="flex gap-4">
             <a href="#" className="hover:text-foreground">
-              Terms
+              Conditions d'utilisation
             </a>
             <a href="#" className="hover:text-foreground">
-              Privacy
+              Confidentialité
             </a>
             <a href="#" className="hover:text-foreground">
-              Accessibility
+              Accessibilité
             </a>
             <a href="#" className="hover:text-foreground">
               Support
             </a>
             <a href="#" className="hover:text-foreground">
-              Your Privacy Choices
+              Paramètres de confidentialité
             </a>
           </div>
         </footer>
