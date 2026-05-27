@@ -103,9 +103,9 @@ export default function Index() {
             <div key={section.id} className="border border-border rounded-lg">
               <button
                 onClick={() => toggleSection(section.id)}
-                className="w-full flex items-center justify-between p-4 hover:bg-secondary transition-colors"
+                className="w-full flex items-center justify-between px-4 py-2 hover:bg-secondary transition-colors"
               >
-                <h2 className="text-lg font-semibold">{section.title}</h2>
+                <h2 className="text-base font-semibold">{section.title}</h2>
                 {section.expanded ? (
                   <ChevronUp className="w-5 h-5" />
                 ) : (
