@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ChevronDown, ChevronUp, Info, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Section {
@@ -36,11 +36,16 @@ const questions: Question[] = [
 
 export default function Index() {
   const [completedSections, setCompletedSections] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [sections, setSections] = useState<Section[]>([
     { id: "violence", title: "Violence", expanded: true },
     { id: "blood", title: "Blood", expanded: false },
     { id: "fear", title: "Fear", expanded: false },
   ]);
+
+  const handleAnswer = (questionId: string, value: string) => {
+    setAnswers({ ...answers, [questionId]: value });
+  };
 
   const toggleSection = (sectionId: string) => {
     setSections(
@@ -106,11 +111,16 @@ export default function Index() {
                 className="w-full flex items-center justify-between px-4 py-2 hover:bg-secondary transition-colors"
               >
                 <h2 className="text-base font-semibold">{section.title}</h2>
-                {section.expanded ? (
-                  <ChevronUp className="w-5 h-5" />
-                ) : (
-                  <ChevronDown className="w-5 h-5" />
-                )}
+                <div className="flex items-center gap-2">
+                  {questions.some(
+                    (q) => q.section === section.title && answers[q.id]
+                  ) && <Check className="w-5 h-5 text-primary" />}
+                  {section.expanded ? (
+                    <ChevronUp className="w-5 h-5" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5" />
+                  )}
+                </div>
               </button>
 
               {section.expanded && (
