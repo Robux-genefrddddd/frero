@@ -148,24 +148,24 @@ export default function Index() {
 
         {/* Instructions */}
         <div className="mb-8 space-y-4">
-          <p className="text-sm">Pour participer au giveaway, réponds à tous les formulaires :</p>
+          <p className="text-sm">Tu peux t'inscrire une seule fois. Remplis le formulaire avec soin :</p>
           <ul className="text-sm space-y-2 ml-4">
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Réponds honnêtement à toutes les questions. Les fausses réponses entraîneront une disqualification.
+                Une inscription par personne. Aucune modification possible après envoi.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Un seul compte par personne. Les comptes multiples seront disqualifiés.
+                Réponds honnêtement. Les fausses réponses entraîneront une disqualification.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Remplis tous les champs. Les formulaires incomplets seront rejetés.
+                Tous les champs obligatoires. Les formulaires incomplets seront rejetés.
               </span>
             </li>
           </ul>
