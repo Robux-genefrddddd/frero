@@ -19,18 +19,43 @@ interface Question {
 
 const questions: Question[] = [
   {
-    id: "violence-1",
-    section: "Violence",
-    title: "Does this experience contain violence and/or violent content?",
+    id: "gift-choice-1",
+    section: "Ton Cadeau",
+    title: "Quel cadeau souhaites-tu recevoir ?",
     definition:
-      "Violence: Depictions of the act and/or the consequence of intentional, threatened and/or actual use of physical and/or psychological force against characters and/or players.",
+      "Choisis le type de cadeau qui t'intéresse. Tu ne peux sélectionner qu'une seule option.",
     doNotMeasure: [
-      "Character death due to accidents.",
-      "Nonviolent adversarial games.",
-      "Depictions of natural disasters.",
-      "Roblox default character reset/death mechanics.",
+      "Un compte par personne uniquement",
+      "Les réponses doivent être honnêtes et sincères",
+      "Pas de création de comptes multiples",
     ],
-    options: ["No", "Yes (Contains Violence)"],
+    options: ["Robux", "Nitro Discord", "Carte cadeau"],
+  },
+  {
+    id: "quantity-1",
+    section: "Quantité & Plateforme",
+    title: "Combien de Robux/points souhaites-tu ?",
+    definition:
+      "Indique la quantité désirée. Les montants disponibles : 100, 500, 1000, 5000 Robux ou équivalent.",
+    doNotMeasure: [
+      "Vous ne pouvez demander qu'une seule quantité",
+      "Les demandes excessives seront rejets",
+      "La livraison se fera dans les 7 jours",
+    ],
+    options: ["100 Robux", "500 Robux", "1000 Robux", "5000 Robux"],
+  },
+  {
+    id: "contact-1",
+    section: "Informations de Contact",
+    title: "Quel est ton pseudonyme Roblox ?",
+    definition:
+      "Fournis ton nom d'utilisateur Roblox exact. Nous utiliserons ces infos pour t'envoyer ton cadeau.",
+    doNotMeasure: [
+      "Le nom doit être correct et à jour",
+      "Tu dois avoir un compte actif",
+      "Ne partage pas ton mot de passe",
+    ],
+    options: ["Fourni via input", "Fourni via input", "Fourni via input"],
   },
 ];
 
@@ -38,14 +63,14 @@ export default function Index() {
   const [completedSections, setCompletedSections] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [sections, setSections] = useState<Section[]>([
-    { id: "violence", title: "Violence", expanded: true },
-    { id: "blood", title: "Blood", expanded: false },
-    { id: "fear", title: "Fear", expanded: false },
+    { id: "gift", title: "Ton Cadeau", expanded: true },
+    { id: "quantity", title: "Quantité & Plateforme", expanded: false },
+    { id: "contact", title: "Informations de Contact", expanded: false },
   ]);
 
   const handleAnswer = (questionId: string, value: string) => {
     setAnswers({ ...answers, [questionId]: value });
-    if (value === "Yes (Contains Violence)") {
+    if (value && value !== "Fourni via input") {
       setCompletedSections((prev) => prev + 1);
     }
   };
@@ -66,40 +91,33 @@ export default function Index() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            Maturity & Compliance Questionnaire
+            Giveaway & Dream Form
           </h1>
           <p className="text-sm text-muted-foreground">
-            {completedSections} of 17 sections completed
+            {completedSections} of 3 sections completed
           </p>
         </div>
 
         {/* Instructions */}
         <div className="mb-8 space-y-4">
-          <p className="text-sm">Please answer the questions accurately based on:</p>
+          <p className="text-sm">Réponds aux questions pour participer au giveaway :</p>
           <ul className="text-sm space-y-2 ml-4">
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                The most mature/extreme content a player can possibly experience
-                in your experience (e.g. If your experience depicts mild violence
-                occasionally and moderate violence repeatedly, declare "Repeated
-                Moderate Violence").
+                Réponds honnêtement à toutes les questions du formulaire. Les réponses fausses ou trompeuses entraîneront une disqualification immédiate.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Content in any forms, including and not limited to any assets
-                (textures, models, animations, audio, video, etc.) and/or
-                narratives;
+                Un compte par personne uniquement. Les comptes en double seront disqualifiés et bannis du giveaway.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Creator generated content only; user generated content is not
-                measured. (E.g. you don't need to account for blood in a
-                player's platform avatar brought into your experience.)
+                Complète tous les champs obligatoires. Les demandes incomplètes ne seront pas acceptées.
               </span>
             </li>
           </ul>
@@ -170,7 +188,7 @@ export default function Index() {
                                 option === "Yes (Contains Violence)" && (
                                   <div className="mt-2 flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
                                     <Check className="w-4 h-4" />
-                                    Confirmation enregistrée
+                                    Choix enregistré ✓
                                   </div>
                                 )}
                             </div>
@@ -188,68 +206,58 @@ export default function Index() {
         <div className="mt-12 space-y-6">
           <div className="space-y-4">
             <p className="text-sm font-semibold">
-              After you submit this form, you'll receive a content maturity
-              label (Minimal, Mild, Moderate, or Restricted) and a regional
-              compliance result for your experience.
+              Après avoir soumis ce formulaire, ta demande sera traitée dans les 7 jours.
+              Tu recevras une notification avec ton cadeau et les instructions de livraison.
             </p>
-            <h3 className="font-semibold mt-4">Important Note</h3>
+            <h3 className="font-semibold mt-4">Note Importante</h3>
             <ul className="text-sm space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  You may retake the Questionnaire anytime to accurately reflect
-                  the latest content in your experience.
+                  Une fois ta demande soumise, tu ne pourras pas la modifier.
+                  Vérifie bien toutes tes réponses avant d'envoyer.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  You must come back and update your response if any of your
-                  answers changed (e.g. because of an experience update).
+                  Les gagnants sont sélectionnés aléatoirement parmi les participants éligibles.
+                  Assure-toi que ton compte Roblox est actif et non banni.
                 </span>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold">Impacts on Your Experience</h3>
+            <h3 className="font-semibold">Ce que ça change pour toi</h3>
             <p className="text-sm">
-              Content maturity labels appear on the experience detail page and
-              are used to inform search and discovery. Experiences without a
-              content maturity label will show an "Unknown" label and won't be
-              recommended or playable to users. Please generate a content
-              maturity label for your experience as soon as it is eligible.
+              En participant au giveaway, tu acceptes nos conditions d'utilisation.
+              Si tu es sélectionné, tu auras accès à ton cadeau directement depuis ton inventaire Roblox.
             </p>
             <ul className="text-sm space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Content Maturity Label:</span>{" "}
-                  This label provides general information about content in your
-                  experience, so users can decide whether it's appropriate for
-                  them. This label will be displayed on your experience's
-                  details page and is used to inform parental controls.
+                  <span className="font-semibold">Livraison des Robux :</span>{" "}
+                  Les Robux seront envoyés directement à ton compte Roblox dans les 7 jours suivant la sélection.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Regional Compliance:</span> If
-                  your experience contains certain themes, or doesn't follow
-                  Roblox policy APIs, it may not be allowed in some regions.
-                  This information isn't displayed publicly, but it may affect
-                  who can access your experience.
+                  <span className="font-semibold">Cadeaux alternatifs :</span> Les cadeaux Nitro et cartes cadeau seront
+                  envoyés via email avec les instructions de rédemption.
                 </span>
               </li>
             </ul>
           </div>
 
           <p className="text-sm">
-            Learn more about our{" "}
+            Besoin d'aide ? Consulte{" "}
             <a href="#" className="text-primary hover:underline">
-              Policy APIs
+              notre FAQ
             </a>
-            , which help you make your experience dynamically compliant.
+            {" "}ou contacte notre support.
           </p>
         </div>
 
@@ -257,36 +265,36 @@ export default function Index() {
         <div className="mt-12 space-y-6 pb-8">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-base">Content Maturity Label</h3>
+              <h3 className="font-semibold text-base">Statut de ta Demande</h3>
               <Info className="w-4 h-4 text-muted-foreground" />
             </div>
-            <p className="text-sm font-semibold">Descriptors</p>
-            {answers["violence-1"] === "Yes (Contains Violence)" ? (
+            <p className="text-sm font-semibold">Étape Actuelle</p>
+            {answers["gift-choice-1"] ? (
               <div className="flex items-center gap-2 text-green-600 font-semibold p-3 bg-green-50 rounded-lg">
                 <Check className="w-5 h-5" />
-                <span>Violence Confirmed</span>
+                <span>Cadeau sélectionné : {answers["gift-choice-1"]}</span>
               </div>
             ) : (
               <>
-                <div className="text-sm text-muted-foreground">Unknown</div>
-                <p className="text-sm text-muted-foreground">None</p>
+                <div className="text-sm text-muted-foreground">En attente</div>
+                <p className="text-sm text-muted-foreground">Complète le formulaire pour continuer</p>
               </>
             )}
           </div>
 
           <div className="border-t border-border pt-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-base">Non-Compliant Regions</h3>
+              <h3 className="font-semibold text-base">Disponibilité</h3>
               <Info className="w-4 h-4 text-muted-foreground" />
             </div>
             <div className="flex gap-8">
               <div>
-                <p className="text-sm font-semibold mb-2">Descriptors</p>
-                <p className="text-sm text-muted-foreground">None</p>
+                <p className="text-sm font-semibold mb-2">Régions Acceptées</p>
+                <p className="text-sm text-muted-foreground">Monde entier</p>
               </div>
               <div>
-                <p className="text-sm font-semibold mb-2">Age Restriction</p>
-                <Info className="w-4 h-4 text-muted-foreground" />
+                <p className="text-sm font-semibold mb-2">Restrictions</p>
+                <p className="text-sm text-muted-foreground">Compte Roblox actif requis</p>
               </div>
             </div>
           </div>
@@ -295,28 +303,28 @@ export default function Index() {
         {/* Start Button */}
         <div className="pb-8">
           <button className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-            Start
+            Envoyer ma demande
           </button>
         </div>
 
         {/* Footer */}
         <footer className="text-xs text-muted-foreground mt-12 pt-6 border-t border-border space-y-2">
-          <p>©2026 Roblox Corporation. All rights reserved.</p>
+          <p>©2026 Dream Giveaway. Tous droits réservés.</p>
           <div className="flex gap-4">
             <a href="#" className="hover:text-foreground">
-              Terms
+              Conditions d'utilisation
             </a>
             <a href="#" className="hover:text-foreground">
-              Privacy
+              Confidentialité
             </a>
             <a href="#" className="hover:text-foreground">
-              Accessibility
+              Accessibilité
             </a>
             <a href="#" className="hover:text-foreground">
               Support
             </a>
             <a href="#" className="hover:text-foreground">
-              Your Privacy Choices
+              Paramètres de confidentialité
             </a>
           </div>
         </footer>
