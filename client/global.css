@@ -80,9 +80,30 @@
     white-space: pre;
   }
 
-  input[type="radio"],
+  input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid hsl(var(--muted-foreground));
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  input[type="radio"]:hover {
+    border-color: hsl(var(--primary));
+  }
+
+  input[type="radio"]:checked {
+    background: radial-gradient(circle at center, hsl(var(--primary)) 40%, transparent 40%);
+    border-color: hsl(var(--primary));
+  }
+
   input[type="checkbox"] {
     accent-color: hsl(var(--primary));
-    cursor: pointer;
   }
 }
