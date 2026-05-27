@@ -219,21 +219,6 @@ export default function Index() {
                         {question.options[0] === "contact-multiinput" ? (
                           <div className="space-y-3">
                             <div>
-                              <label className="block text-sm font-semibold mb-2">Pseudonyme Roblox *</label>
-                              <input
-                                type="text"
-                                placeholder="Ton pseudo Roblox"
-                                value={(answers["contact-roblox"] || "")}
-                                onChange={(e) =>
-                                  setAnswers({
-                                    ...answers,
-                                    "contact-roblox": e.target.value,
-                                  })
-                                }
-                                className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-                              />
-                            </div>
-                            <div>
                               <label className="block text-sm font-semibold mb-2">Pseudonyme Discord *</label>
                               <input
                                 type="text"
@@ -263,7 +248,7 @@ export default function Index() {
                                 className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                               />
                             </div>
-                            {answers["contact-roblox"] && answers["contact-discord"] && answers["contact-discord-id"] && (
+                            {answers["contact-discord"] && answers["contact-discord-id"] && (
                               <div className="flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
                                 <Check className="w-5 h-5" />
                                 Informations enregistrées
