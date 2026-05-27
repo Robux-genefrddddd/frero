@@ -40,7 +40,7 @@ const baseQuestions: Question[] = [
       "Fournis ton pseudo Roblox, ton pseudo Discord et ton ID Discord. Ces infos sont essentielles pour te contacter et t'envoyer ton cadeau.",
     doNotMeasure: [
       "Tous les champs sont obligatoires",
-      "L'ID Discord doit être valide (17-19 chiffres)",
+      "L'ID Discord doit être valide",
       "Ne partage jamais ton mot de passe",
     ],
     options: ["contact-multiinput"],
@@ -312,8 +312,8 @@ export default function Index() {
         <div className="mt-12 space-y-6">
           <div className="space-y-4">
             <p className="text-sm font-semibold">
-              Après avoir soumis ce formulaire, ta demande sera traitée dans les 7 jours.
-              Tu recevras une notification avec ton cadeau et les instructions de livraison.
+              Après avoir soumis ce formulaire, tu verras l'annonce du giveaway sur Discord ou recevras une notification directement sur le site.
+              Les gagnants seront annoncés et notifiés individuellement.
             </p>
             <h3 className="font-semibold mt-4">Note Importante</h3>
             <ul className="text-sm space-y-2 ml-4">
@@ -328,7 +328,6 @@ export default function Index() {
                 <span className="text-primary">•</span>
                 <span>
                   Les gagnants sont sélectionnés aléatoirement parmi les participants éligibles.
-                  Assure-toi que ton compte Roblox est actif et non banni.
                 </span>
               </li>
             </ul>
@@ -344,15 +343,14 @@ export default function Index() {
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Livraison des Robux :</span>{" "}
-                  Les Robux seront envoyés directement à ton compte Roblox dans les 7 jours suivant la sélection.
+                  <span className="font-semibold">Annonce du Giveaway :</span>{" "}
+                  Le giveaway sera annoncé sur Discord et/ou via notification directe sur le site.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Cadeaux alternatifs :</span> Les cadeaux Nitro et cartes cadeau seront
-                  envoyés via email avec les instructions de rédemption.
+                  <span className="font-semibold">Réception du Cadeau :</span> Si tu es sélectionné, tu recevras ton cadeau via Discord ou par email selon le type de cadeau.
                 </span>
               </li>
             </ul>
@@ -400,7 +398,7 @@ export default function Index() {
               </div>
               <div>
                 <p className="text-sm font-semibold mb-2">Restrictions</p>
-                <p className="text-sm text-muted-foreground">Compte Roblox actif requis</p>
+                <p className="text-sm text-muted-foreground">Aucune</p>
               </div>
             </div>
           </div>
