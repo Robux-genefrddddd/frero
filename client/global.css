@@ -79,4 +79,12 @@
     overflow-x: auto;
     white-space: pre;
   }
+
+  input[type="radio"] {
+    @apply accent-primary;
+  }
+
+  input[type="checkbox"] {
+    @apply accent-primary;
+  }
 }
