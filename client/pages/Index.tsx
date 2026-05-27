@@ -71,8 +71,9 @@ export default function Index() {
   ]);
 
   const handleAnswer = (questionId: string, value: string) => {
+    const oldValue = answers[questionId];
     setAnswers({ ...answers, [questionId]: value });
-    if (value && value !== "Fourni via input") {
+    if (value && !oldValue) {
       setCompletedSections((prev) => prev + 1);
     }
   };
@@ -156,7 +157,7 @@ export default function Index() {
 
                         <div className="space-y-2">
                           <p className="text-sm">
-                            <span className="font-semibold">Violence:</span>{" "}
+                            <span className="font-semibold">{question.section}:</span>{" "}
                             {question.definition}
                           </p>
                           <p className="text-sm font-semibold">Do NOT measure:</p>
