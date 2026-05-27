@@ -27,8 +27,8 @@ const baseQuestions: Question[] = [
       "Choisis le type de cadeau qui t'intéresse. Tu ne peux sélectionner qu'une seule option.",
     doNotMeasure: [
       "Un compte par personne uniquement",
-      "Les réponses doivent être honnêtes et sincères",
-      "Pas de création de comptes multiples",
+      "Soyez honnête dans vos réponses",
+      "Les comptes multiples seront disqualifiés",
     ],
     options: ["Robux", "Nitro Discord", "Carte cadeau"],
   },
@@ -37,11 +37,11 @@ const baseQuestions: Question[] = [
     section: "Informations de Contact",
     title: "Complète tes informations de contact",
     definition:
-      "Fournis ton pseudo Roblox, ton pseudo Discord et ton ID Discord. Ces infos sont essentielles pour te contacter et t'envoyer ton cadeau.",
+      "Entre ton pseudo Discord et ton ID Discord. Ces informations nous permettront de te contacter et de t'envoyer ton cadeau.",
     doNotMeasure: [
       "Tous les champs sont obligatoires",
-      "L'ID Discord doit être valide",
-      "Ne partage jamais ton mot de passe",
+      "Vérifie bien tes informations avant de continuer",
+      "Ne partage jamais ton mot de passe avec personne",
     ],
     options: ["contact-multiinput"],
     placeholder: "Informations de contact",
@@ -53,26 +53,26 @@ const getQuantityQuestion = (giftChoice: string): Question => {
     id: "quantity-1",
     section: "Quantité & Plateforme",
     doNotMeasure: [
-      "Vous ne pouvez demander qu'une seule quantité",
-      "Les demandes excessives seront rejets",
-      "L'annonce du giveaway se fera via Discord ou notification site",
+      "Une seule quantité par personne",
+      "Les demandes excessives seront refusées",
+      "L'annonce des gagnants se fera sur Discord ou via le site",
     ],
   };
 
   if (giftChoice === "Robux") {
     return {
       ...baseQuestion,
-      title: "Combien de Robux souhaites-tu ?",
+      title: "Combien de Robux veux-tu ?",
       definition:
-        "Indique la quantité de Robux désirée. Les montants disponibles : 100, 500, 1000, 5000 Robux.",
+        "Choisis le montant souhaité : 100, 500, 1000 ou 5000 Robux.",
       options: ["100 Robux", "500 Robux", "1000 Robux", "5000 Robux"],
     };
   } else if (giftChoice === "Nitro Discord") {
     return {
       ...baseQuestion,
-      title: "Quel type de Nitro Discord préfères-tu ?",
+      title: "Quel type de Nitro Discord veux-tu ?",
       definition:
-        "Nitro Classic offre des émojis custom et des GIFs animés. Nitro Full inclut les jeux. Choisis une seule option.",
+        "Nitro Classic : émojis custom et GIFs animés. Nitro Full : jeux inclus. Choisis une option.",
       options: ["Nitro Classic (1 mois)", "Nitro Full (1 mois)"],
     };
   } else if (giftChoice === "Carte cadeau") {
@@ -80,7 +80,7 @@ const getQuantityQuestion = (giftChoice: string): Question => {
       ...baseQuestion,
       title: "Quel montant de carte cadeau veux-tu ?",
       definition:
-        "Indique le montant souhaité. Les cartes disponibles : 10€, 25€, 50€, 100€.",
+        "Choisis ton montant : 10€, 25€, 50€ ou 100€.",
       options: ["10€", "25€", "50€", "100€"],
     };
   }
@@ -148,24 +148,24 @@ export default function Index() {
 
         {/* Instructions */}
         <div className="mb-8 space-y-4">
-          <p className="text-sm">Réponds aux questions pour participer au giveaway :</p>
+          <p className="text-sm">Pour participer au giveaway, réponds à tous les formulaires :</p>
           <ul className="text-sm space-y-2 ml-4">
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Réponds honnêtement à toutes les questions du formulaire. Les réponses fausses ou trompeuses entraîneront une disqualification immédiate.
+                Réponds honnêtement à toutes les questions. Les fausses réponses entraîneront une disqualification.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Un compte par personne uniquement. Les comptes en double seront disqualifiés et bannis du giveaway.
+                Un seul compte par personne. Les comptes multiples seront disqualifiés.
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary">•</span>
               <span>
-                Complète tous les champs obligatoires. Les demandes incomplètes ne seront pas acceptées.
+                Remplis tous les champs. Les formulaires incomplets seront rejetés.
               </span>
             </li>
           </ul>
@@ -205,7 +205,7 @@ export default function Index() {
                             <span className="font-semibold">{question.section}:</span>{" "}
                             {question.definition}
                           </p>
-                          <p className="text-sm font-semibold">Do NOT measure:</p>
+                          <p className="text-sm font-semibold">À respecter :</p>
                           <ul className="text-sm space-y-1 ml-4">
                             {question.doNotMeasure.map((item, idx) => (
                               <li key={idx} className="flex gap-2">
@@ -293,7 +293,7 @@ export default function Index() {
                                 {answers[question.id] === option && (
                                   <div className="mt-2 flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
                                     <Check className="w-4 h-4" />
-                                    Choix enregistré ✓
+                                    Choix confirmé
                                   </div>
                                 )}
                               </div>
@@ -312,56 +312,53 @@ export default function Index() {
         <div className="mt-12 space-y-6">
           <div className="space-y-4">
             <p className="text-sm font-semibold">
-              Après avoir soumis ce formulaire, tu verras l'annonce du giveaway sur Discord ou recevras une notification directement sur le site.
-              Les gagnants seront annoncés et notifiés individuellement.
+              Après avoir soumis, tu verras l'annonce du giveaway sur Discord ou recevras une notification sur le site.
+              Les gagnants seront notifiés directement.
             </p>
-            <h3 className="font-semibold mt-4">Note Importante</h3>
+            <h3 className="font-semibold mt-4">Points importants</h3>
             <ul className="text-sm space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  Une fois ta demande soumise, tu ne pourras pas la modifier.
-                  Vérifie bien toutes tes réponses avant d'envoyer.
+                  Une fois soumise, tu ne pourras pas modifier ta demande. Vérifie tout avant d'envoyer.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  Les gagnants sont sélectionnés aléatoirement parmi les participants éligibles.
+                  Les gagnants sont choisis au hasard parmi les participants.
                 </span>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold">Ce que ça change pour toi</h3>
+            <h3 className="font-semibold">Si tu gagnes</h3>
             <p className="text-sm">
-              En participant au giveaway, tu acceptes nos conditions d'utilisation.
-              Si tu es sélectionné, tu auras accès à ton cadeau directement depuis ton inventaire Roblox.
+              En participant, tu acceptes nos conditions. Si tu es sélectionné, tu recevras ton cadeau via Discord ou email.
             </p>
             <ul className="text-sm space-y-2 ml-4">
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Annonce du Giveaway :</span>{" "}
-                  Le giveaway sera annoncé sur Discord et/ou via notification directe sur le site.
+                  <span className="font-semibold">Annonce :</span> L'annonce sera faite sur Discord et/ou le site.
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-primary">•</span>
                 <span>
-                  <span className="font-semibold">Réception du Cadeau :</span> Si tu es sélectionné, tu recevras ton cadeau via Discord ou par email selon le type de cadeau.
+                  <span className="font-semibold">Réception :</span> Tu recevras ton cadeau via Discord ou email selon le type.
                 </span>
               </li>
             </ul>
           </div>
 
           <p className="text-sm">
-            Besoin d'aide ? Consulte{" "}
+            Des questions ? Consulte{" "}
             <a href="#" className="text-primary hover:underline">
-              notre FAQ
+              la FAQ
             </a>
-            {" "}ou contacte notre support.
+            {" "}ou contacte le support.
           </p>
         </div>
 
