@@ -55,7 +55,7 @@ const getQuantityQuestion = (giftChoice: string): Question => {
     doNotMeasure: [
       "Vous ne pouvez demander qu'une seule quantité",
       "Les demandes excessives seront rejets",
-      "La livraison se fera dans les 7 jours",
+      "L'annonce du giveaway se fera via Discord ou notification site",
     ],
   };
 
