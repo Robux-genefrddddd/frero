@@ -45,6 +45,9 @@ export default function Index() {
 
   const handleAnswer = (questionId: string, value: string) => {
     setAnswers({ ...answers, [questionId]: value });
+    if (value === "Yes (Contains Violence)") {
+      setCompletedSections((prev) => prev + 1);
+    }
   };
 
   const toggleSection = (sectionId: string) => {
@@ -149,18 +152,28 @@ export default function Index() {
 
                         <fieldset className="space-y-3">
                           {question.options.map((option) => (
-                            <label
-                              key={option}
-                              className="flex items-center gap-3 cursor-pointer"
-                            >
-                              <input
-                                type="radio"
-                                name={question.id}
-                                value={option}
-                                className="w-4 h-4 cursor-pointer"
-                              />
-                              <span className="text-sm">{option}</span>
-                            </label>
+                            <div key={option}>
+                              <label className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  name={question.id}
+                                  value={option}
+                                  checked={answers[question.id] === option}
+                                  onChange={(e) =>
+                                    handleAnswer(question.id, e.target.value)
+                                  }
+                                  className="w-4 h-4 cursor-pointer"
+                                />
+                                <span className="text-sm">{option}</span>
+                              </label>
+                              {answers[question.id] === option &&
+                                option === "Yes (Contains Violence)" && (
+                                  <div className="mt-2 flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
+                                    <Check className="w-4 h-4" />
+                                    Confirmation enregistrée
+                                  </div>
+                                )}
+                            </div>
                           ))}
                         </fieldset>
                       </div>
@@ -248,8 +261,17 @@ export default function Index() {
               <Info className="w-4 h-4 text-muted-foreground" />
             </div>
             <p className="text-sm font-semibold">Descriptors</p>
-            <div className="text-sm text-muted-foreground">Unknown</div>
-            <p className="text-sm text-muted-foreground">None</p>
+            {answers["violence-1"] === "Yes (Contains Violence)" ? (
+              <div className="flex items-center gap-2 text-green-600 font-semibold p-3 bg-green-50 rounded-lg">
+                <Check className="w-5 h-5" />
+                <span>Violence Confirmed</span>
+              </div>
+            ) : (
+              <>
+                <div className="text-sm text-muted-foreground">Unknown</div>
+                <p className="text-sm text-muted-foreground">None</p>
+              </>
+            )}
           </div>
 
           <div className="border-t border-border pt-6 space-y-4">
