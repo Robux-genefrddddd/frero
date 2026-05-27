@@ -15,6 +15,7 @@ interface Question {
   definition: string;
   doNotMeasure: string[];
   options: string[];
+  placeholder?: string;
 }
 
 const questions: Question[] = [
@@ -49,13 +50,14 @@ const questions: Question[] = [
     section: "Informations de Contact",
     title: "Quel est ton pseudonyme Roblox ?",
     definition:
-      "Fournis ton nom d'utilisateur Roblox exact. Nous utiliserons ces infos pour t'envoyer ton cadeau.",
+      "Fournis ton nom d'utilisateur Roblox exact. Nous utiliserons ce pseudo pour t'envoyer ton cadeau.",
     doNotMeasure: [
-      "Le nom doit être correct et à jour",
-      "Tu dois avoir un compte actif",
-      "Ne partage pas ton mot de passe",
+      "Le pseudo doit être correct et à jour",
+      "Tu dois avoir un compte actif et en bon état",
+      "Ne partage jamais ton mot de passe",
     ],
-    options: ["Fourni via input", "Fourni via input", "Fourni via input"],
+    options: ["textinput"],
+    placeholder: "Ton pseudonyme Roblox",
   },
 ];
 
@@ -168,32 +170,63 @@ export default function Index() {
                           </ul>
                         </div>
 
-                        <fieldset className="space-y-3">
-                          {question.options.map((option) => (
-                            <div key={option}>
-                              <label className="flex items-center gap-3 cursor-pointer">
-                                <input
-                                  type="radio"
-                                  name={question.id}
-                                  value={option}
-                                  checked={answers[question.id] === option}
-                                  onChange={(e) =>
-                                    handleAnswer(question.id, e.target.value)
+                        {question.options[0] === "textinput" ? (
+                          <div className="space-y-3">
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                placeholder={question.placeholder || "Saisis ta réponse..."}
+                                value={answers[question.id] || ""}
+                                onChange={(e) =>
+                                  handleAnswer(question.id, e.target.value)
+                                }
+                                className="flex-1 px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                              />
+                              <button
+                                onClick={() => {
+                                  if (answers[question.id]) {
+                                    // Validation effectuée, le message apparaît
                                   }
-                                  className="w-4 h-4 cursor-pointer"
-                                />
-                                <span className="text-sm">{option}</span>
-                              </label>
-                              {answers[question.id] === option &&
-                                option === "Yes (Contains Violence)" && (
+                                }}
+                                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+                              >
+                                Valider
+                              </button>
+                            </div>
+                            {answers[question.id] && (
+                              <div className="flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
+                                <Check className="w-4 h-4" />
+                                Pseudo enregistré ✓
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <fieldset className="space-y-3">
+                            {question.options.map((option) => (
+                              <div key={option}>
+                                <label className="flex items-center gap-3 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name={question.id}
+                                    value={option}
+                                    checked={answers[question.id] === option}
+                                    onChange={(e) =>
+                                      handleAnswer(question.id, e.target.value)
+                                    }
+                                    className="w-4 h-4 cursor-pointer"
+                                  />
+                                  <span className="text-sm">{option}</span>
+                                </label>
+                                {answers[question.id] === option && (
                                   <div className="mt-2 flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
                                     <Check className="w-4 h-4" />
                                     Choix enregistré ✓
                                   </div>
                                 )}
-                            </div>
-                          ))}
-                        </fieldset>
+                              </div>
+                            ))}
+                          </fieldset>
+                        )}
                       </div>
                     ))}
                 </div>
