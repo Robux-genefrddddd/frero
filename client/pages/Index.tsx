@@ -291,7 +291,7 @@ export default function Index() {
             </div>
             <p className="text-sm font-semibold">Étape Actuelle</p>
             {answers["gift-choice-1"] ? (
-              <div className="flex items-center gap-2 text-green-600 font-semibold p-3 bg-green-50 rounded-lg">
+              <div className="flex items-center gap-2 text-green-600 font-semibold">
                 <Check className="w-5 h-5" />
                 <span>Cadeau sélectionné : {answers["gift-choice-1"]}</span>
               </div>
