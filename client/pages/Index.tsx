@@ -18,7 +18,7 @@ interface Question {
   placeholder?: string;
 }
 
-const questions: Question[] = [
+const baseQuestions: Question[] = [
   {
     id: "gift-choice-1",
     section: "Ton Cadeau",
@@ -31,19 +31,6 @@ const questions: Question[] = [
       "Pas de création de comptes multiples",
     ],
     options: ["Robux", "Nitro Discord", "Carte cadeau"],
-  },
-  {
-    id: "quantity-1",
-    section: "Quantité & Plateforme",
-    title: "Combien de Robux/points souhaites-tu ?",
-    definition:
-      "Indique la quantité désirée. Les montants disponibles : 100, 500, 1000, 5000 Robux ou équivalent.",
-    doNotMeasure: [
-      "Vous ne pouvez demander qu'une seule quantité",
-      "Les demandes excessives seront rejets",
-      "La livraison se fera dans les 7 jours",
-    ],
-    options: ["100 Robux", "500 Robux", "1000 Robux", "5000 Robux"],
   },
   {
     id: "contact-1",
@@ -61,6 +48,62 @@ const questions: Question[] = [
   },
 ];
 
+const getQuantityQuestion = (giftChoice: string): Question => {
+  const baseQuestion = {
+    id: "quantity-1",
+    section: "Quantité & Plateforme",
+    doNotMeasure: [
+      "Vous ne pouvez demander qu'une seule quantité",
+      "Les demandes excessives seront rejets",
+      "La livraison se fera dans les 7 jours",
+    ],
+  };
+
+  if (giftChoice === "Robux") {
+    return {
+      ...baseQuestion,
+      title: "Combien de Robux souhaites-tu ?",
+      definition:
+        "Indique la quantité de Robux désirée. Les montants disponibles : 100, 500, 1000, 5000 Robux.",
+      options: ["100 Robux", "500 Robux", "1000 Robux", "5000 Robux"],
+    };
+  } else if (giftChoice === "Nitro Discord") {
+    return {
+      ...baseQuestion,
+      title: "Quel type de Nitro Discord préfères-tu ?",
+      definition:
+        "Nitro Classic offre des émojis custom et des GIFs animés. Nitro Full inclut les jeux. Choisis une seule option.",
+      options: ["Nitro Classic (1 mois)", "Nitro Full (1 mois)"],
+    };
+  } else if (giftChoice === "Carte cadeau") {
+    return {
+      ...baseQuestion,
+      title: "Quel montant de carte cadeau veux-tu ?",
+      definition:
+        "Indique le montant souhaité. Les cartes disponibles : 10€, 25€, 50€, 100€.",
+      options: ["10€", "25€", "50€", "100€"],
+    };
+  }
+
+  return {
+    ...baseQuestion,
+    title: "Sélectionne d'abord un cadeau",
+    definition: "Complète la section 'Ton Cadeau' pour continuer.",
+    options: [],
+  };
+};
+
+const getQuestions = (answers: Record<string, string>): Question[] => {
+  const giftChoice = answers["gift-choice-1"];
+  const quantityQuestion = getQuantityQuestion(giftChoice);
+
+  return [
+    baseQuestions[0],
+    quantityQuestion,
+    baseQuestions[1],
+  ];
+};
+
 export default function Index() {
   const [completedSections, setCompletedSections] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -69,6 +112,8 @@ export default function Index() {
     { id: "quantity", title: "Quantité & Plateforme", expanded: false },
     { id: "contact", title: "Informations de Contact", expanded: false },
   ]);
+
+  const questions = getQuestions(answers);
 
   const handleAnswer = (questionId: string, value: string) => {
     const oldValue = answers[questionId];
