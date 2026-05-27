@@ -35,16 +35,16 @@ const baseQuestions: Question[] = [
   {
     id: "contact-1",
     section: "Informations de Contact",
-    title: "Quel est ton pseudonyme Roblox ?",
+    title: "Complète tes informations de contact",
     definition:
-      "Fournis ton nom d'utilisateur Roblox exact. Nous utiliserons ce pseudo pour t'envoyer ton cadeau.",
+      "Fournis ton pseudo Roblox, ton pseudo Discord et ton ID Discord. Ces infos sont essentielles pour te contacter et t'envoyer ton cadeau.",
     doNotMeasure: [
-      "Le pseudo doit être correct et à jour",
-      "Tu dois avoir un compte actif et en bon état",
+      "Tous les champs sont obligatoires",
+      "L'ID Discord doit être valide (17-19 chiffres)",
       "Ne partage jamais ton mot de passe",
     ],
-    options: ["textinput"],
-    placeholder: "Ton pseudonyme Roblox",
+    options: ["contact-multiinput"],
+    placeholder: "Informations de contact",
   },
 ];
 
@@ -216,7 +216,61 @@ export default function Index() {
                           </ul>
                         </div>
 
-                        {question.options[0] === "textinput" ? (
+                        {question.options[0] === "contact-multiinput" ? (
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-sm font-semibold mb-2">Pseudonyme Roblox *</label>
+                              <input
+                                type="text"
+                                placeholder="Ton pseudo Roblox"
+                                value={(answers["contact-roblox"] || "")}
+                                onChange={(e) =>
+                                  setAnswers({
+                                    ...answers,
+                                    "contact-roblox": e.target.value,
+                                  })
+                                }
+                                className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-semibold mb-2">Pseudonyme Discord *</label>
+                              <input
+                                type="text"
+                                placeholder="Ton pseudo Discord"
+                                value={(answers["contact-discord"] || "")}
+                                onChange={(e) =>
+                                  setAnswers({
+                                    ...answers,
+                                    "contact-discord": e.target.value,
+                                  })
+                                }
+                                className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-semibold mb-2">ID Discord *</label>
+                              <input
+                                type="text"
+                                placeholder="Ton ID Discord (ex: 123456789012345678)"
+                                value={(answers["contact-discord-id"] || "")}
+                                onChange={(e) =>
+                                  setAnswers({
+                                    ...answers,
+                                    "contact-discord-id": e.target.value,
+                                  })
+                                }
+                                className="w-full px-4 py-3 border border-border rounded-lg text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                              />
+                            </div>
+                            {answers["contact-roblox"] && answers["contact-discord"] && answers["contact-discord-id"] && (
+                              <div className="flex items-center gap-2 text-green-600 text-sm font-semibold animate-in slide-in-from-top-2 duration-300">
+                                <Check className="w-5 h-5" />
+                                Informations enregistrées
+                              </div>
+                            )}
+                          </div>
+                        ) : question.options[0] === "textinput" ? (
                           <div className="space-y-3">
                             <input
                               type="text"
